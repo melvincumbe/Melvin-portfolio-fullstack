@@ -99,10 +99,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const hamburger = document.getElementById('hamburger');
   const mobileMenu = document.getElementById('mobile-menu');
   hamburger.addEventListener('click', () => {
-    mobileMenu.classList.toggle('open');
+    const isOpen = mobileMenu.classList.toggle('open');
+    hamburger.setAttribute('aria-expanded', isOpen);
   });
   document.querySelectorAll('.mob-link').forEach(l => {
-    l.addEventListener('click', () => mobileMenu.classList.remove('open'));
+    l.addEventListener('click', () => {
+      mobileMenu.classList.remove('open');
+      hamburger.setAttribute('aria-expanded', 'false');
+    });
   });
 
   /* ─── THEME TOGGLE ─── */
@@ -116,7 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* ─── TYPING EFFECT ─── */
   const phrases = [
-    'Desenvolvedor Front-End | Criador de Soluções',
+    'Desenvolvedor Full-Stack | Criador de Soluções',
     'Especialista em Flutter & Node.js',
     'Apaixonado por Interfaces Modernas',
     'Baseado em Maputo, Moçambique 🇲🇿'
@@ -136,7 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     setTimeout(typeLoop, deleting ? 38 : 72);
   }
-  typeLoop();
+  if (typed) typeLoop();
 
   /* ─── TERMINAL TYPEWRITER ─── */
   const terminalText = document.getElementById('terminal-text');
@@ -144,12 +148,12 @@ document.addEventListener('DOMContentLoaded', () => {
   "name": "Melvin Cumbi",
   "age": 23,
   "location": "Maputo, Mozambique",
-  "role": "Front-End Developer",
+  "role": "Full-Stack Developer",
   "education": "Engenharia Informática",
-  "experience": "3 anos",
+  "experience": "4 anos",
   "stack": [
     "HTML5", "CSS3", "JavaScript",
-    "Flutter", "Node.js", "Firebase"
+    "Flutter", "Node.js", "Python"
   ],
   "passions": [
     "UI/UX Design",
@@ -268,6 +272,31 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  /* ─── 3D MOUSE TILT ON PROJECT CARDS ─── */
+  document.querySelectorAll('.proj-card').forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      const cx = rect.width / 2;
+      const cy = rect.height / 2;
+      const dx = (x - cx) / cx;
+      const dy = (y - cy) / cy;
+
+      card.style.transform = `rotateY(${dx * 15}deg) rotateX(${-dy * 15}deg) scale(1.02)`;
+
+      const glow = card.querySelector('.proj-glow');
+      if (glow) {
+        glow.style.setProperty('--x', `${(x / rect.width) * 100}%`);
+        glow.style.setProperty('--y', `${(y / rect.height) * 100}%`);
+      }
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = '';
+    });
+  });
+
   /* ─── PARALLAX ON HERO PHOTO ─── */
   const heroSection = document.querySelector('.hero');
   const heroPhoto = document.querySelector('.hero-photo-wrap');
@@ -296,10 +325,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   /* ─── EMAILJS ─── */
-  if (typeof emailjs !== 'undefined') {
-    emailjs.init("lwH6Kr1_UanwOLAit");
-  }
-
   const form = document.getElementById('contact-form');
   const status = document.getElementById('form-status');
 
@@ -310,8 +335,15 @@ document.addEventListener('DOMContentLoaded', () => {
         status.textContent = 'Enviando...';
         status.style.color = 'var(--primary)';
       }
+
+      const templateParams = {
+        name: form.querySelector('[name="user_name"]').value.trim(),
+        user_email: form.querySelector('[name="user_email"]').value.trim(),
+        message: form.querySelector('[name="message"]').value.trim()
+      };
+
       if (typeof emailjs !== 'undefined') {
-        emailjs.sendForm('service_mxt7ekr', 'template_4rq4bax', this)
+        emailjs.send('service_mxt7ekr', 'template_r5pxex9', templateParams)
           .then(() => {
             status.textContent = '✓ Mensagem enviada com sucesso!';
             status.style.color = '#28c840';
@@ -340,88 +372,3 @@ document.addEventListener('DOMContentLoaded', () => {
   if (yr) yr.textContent = new Date().getFullYear();
 
 });
-// script.js
-
-(function() {
-  const canvas = document.getElementById("binary-rain");
-  const ctx = canvas.getContext("2d");
-
-  function resize() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-  }
-  resize();
-  window.addEventListener("resize", resize);
-
-  const fontSize = 13;
-  let cols, drops;
-
-  function init() {
-    cols = Math.floor(canvas.width / fontSize);
-    drops = Array(cols).fill(0).map(() => Math.random() * -50);
-  }
-  init();
-  window.addEventListener("resize", init);
-
-  const chars = "01001101010110001100101100110101"; // Binary and matrix-like characters
-
-  function draw() {
-    ctx.fillStyle = "rgba(6,6,16,0.05)"; // Fading trail effect
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    for (let i = 0; i < cols; i++) {
-      const char = chars[Math.floor(Math.random() * chars.length)];
-      const x = i * fontSize;
-      const y = drops[i] * fontSize;
-
-      // Brighter head of the stream
-      const alpha = Math.random() > 0.97 ? 1 : 0.7;
-      if (drops[i] * fontSize < fontSize * 2) {
-        ctx.fillStyle = `rgba(255,255,255,${alpha})`;
-      } else {
-        // Greenish-blue body of the stream
-        const brightness = Math.random() > 0.95 ? 220 : 130;
-        ctx.fillStyle = `rgba(0,${brightness},${brightness},${alpha})`;
-      }
-
-      ctx.font = `${fontSize}px 'Orbitron', monospace`;
-      ctx.fillText(char, x, y);
-
-      // Reset drop when it goes off screen
-      if (y * 1.5 > canvas.height && Math.random() > 0.975) { // Adjusted condition for better flow
-        drops[i] = 0;
-      }
-      drops[i] += 0.5; // Falling speed
-    }
-  }
-
-  setInterval(draw, 50); // Animation frame rate (50ms = 20 frames per second)
-})();
-
-// Your existing JavaScript code can follow here
-// document.addEventListener('DOMContentLoaded', () => { ... });
-// ====================== EMAILJS - FORMULÁRIO ======================
-document.getElementById("contact-form").addEventListener("submit", function(event) {
-    event.preventDefault();
-
-    const templateParams = {
-        name: document.querySelector('[name="user_name"]').value.trim(),
-        user_email: document.querySelector('[name="user_email"]').value.trim(),
-        message: document.querySelector('[name="message"]').value.trim()
-    };
-
-    // ← TUDO PRONTO (service + template já com os teus IDs)
-    emailjs.send("service_mxt7ekr", "template_r5pxex9", templateParams)
-        .then(function(response) {
-            console.log(" Enviado!", response);
-            document.getElementById("form-status").innerHTML = 
-                `<span style="color:#00ff9d;"> Mensagem enviada com sucesso! Obrigado </span>`;
-            document.getElementById("contact-form").reset();
-        })
-        .catch(function(error) {
-            console.log(" Erro:", error);
-            document.getElementById("form-status").innerHTML = 
-                `<span style="color:#ff4d4d;"> Algo correu mal. Tenta novamente.</span>`;
-        });
-});
-// ====================== FIM EMAILJS ======================
