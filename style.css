@@ -522,18 +522,19 @@ a:hover ~ .cursor-ring, button:hover ~ .cursor-ring {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
   gap: 22px; max-width:1100px; margin: 0 auto;
+  perspective: 1200px;
 }
 .proj-card {
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: 14px; overflow:hidden;
-  transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+  transition: transform 0.1s ease-out, border-color 0.3s, box-shadow 0.3s;
   position: relative; cursor:pointer;
+  transform-style: preserve-3d;
 }
 .proj-card:hover {
-  transform: translateY(-7px);
-  border-color: rgba(0,242,255,0.35);
-  box-shadow: 0 16px 40px rgba(0,0,0,0.4), 0 0 20px rgba(0,242,255,0.05);
+  border-color: rgba(0,242,255,0.5);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5), 0 0 30px rgba(0,242,255,0.1);
 }
 .proj-card.featured { border-color: rgba(0,200,255,0.3); }
 .feat-badge {
@@ -544,16 +545,27 @@ a:hover ~ .cursor-ring, button:hover ~ .cursor-ring {
   padding: 3px 10px; border-radius:10px;
   font-family: var(--font-head); font-size: 0.6rem;
   letter-spacing: 0.08em;
+  z-index: 2;
 }
 .proj-img {
   height: 140px;
   background: linear-gradient(135deg, rgba(0,242,255,0.04), rgba(0,20,60,0.3));
   display: flex; align-items:center; justify-content:center;
   border-bottom: 1px solid var(--border);
+  transform: translateZ(30px);
+  transition: transform 0.3s;
 }
 .proj-icon { font-size: 2.5rem; color: var(--primary); opacity: 0.5; transition: opacity 0.3s, transform 0.3s; }
-.proj-card:hover .proj-icon { opacity: 0.9; transform: scale(1.15); }
-.proj-body { padding: 18px; }
+.proj-card:hover .proj-icon { opacity: 0.9; transform: scale(1.1) translateZ(50px); }
+.proj-body { padding: 18px; transform: translateZ(20px); transition: transform 0.3s; }
+
+.proj-glow {
+  position: absolute; inset:0; border-radius:14px;
+  background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(0,242,255,0.15), transparent 60%);
+  opacity: 0; transition: opacity 0.3s; pointer-events: none;
+  z-index: 5;
+}
+.proj-card:hover .proj-glow { opacity: 1; }
 .proj-tags { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:8px; }
 .proj-tags span {
   padding: 3px 9px;
@@ -713,21 +725,3 @@ a:hover ~ .cursor-ring, button:hover ~ .cursor-ring {
 .soc-btn.soc-github    { color: #ccc;    border-color: rgba(200,200,200,0.2); }
 .soc-btn.soc-whatsapp  { color: #25d366; border-color: rgba(37,211,102,0.3); }
 .soc-btn.soc-instagram { color: #e1306c; border-color: rgba(225,48,108,0.3); }
-/* style.css */
-
-#binary-rain {
-  position: fixed; /* Position it relative to the viewport */
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none; /* Allows clicks/interactions to pass through to elements beneath */
-  z-index: 0; /* Ensures it stays behind all other content */
-  opacity: 0.13; /* Adjust for desired visibility/subtlety */
-}
-
-/* Ensure your body has a background color that works well with the animation */
-body {
-  background-color: #060610; /* Example dark background */
-  /* ... other body styles ... */
-}
