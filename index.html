@@ -26,7 +26,14 @@
 </head>
 
 <body>
-  <body>
+  <!-- PRELOADER -->
+  <div id="preloader">
+    <div class="loader-content">
+      <div class="nav-logo" style="font-size: 3rem;">MC<span class="dot">.</span></div>
+      <div class="loader-text">LOADING</div>
+    </div>
+  </div>
+
   <!-- BINARY RAIN CANVAS -->
   <canvas id="binary-rain"></canvas>
 
@@ -103,6 +110,7 @@
         <div class="hero-actions">
           <a href="#projetos" class="btn-neon">Ver Projetos</a>
           <a href="#contato" class="btn-ghost">Falar Comigo</a>
+          <a href="curriculo.pdf" download class="btn-neon cv-btn">Download CV <i class="fas fa-download"></i></a>
         </div>
         <div class="social-row">
           <a href="https://www.linkedin.com/in/melvin-jacinto-cumbe-622a33245" target="_blank" class="soc-btn soc-linkedin" title="LinkedIn">
@@ -140,7 +148,7 @@
           <li><i class="fas fa-code"></i> Stack: Full-Stack, Flutter, Node.js, Python</li>
           <li><i class="fas fa-graduation-cap"></i> Formação: Engenharia Informática</li>
         </ul>
-        <a href="#" class="btn-neon" style="margin-top:28px;display:inline-flex;align-items:center;gap:8px;">Download CV <i class="fas fa-download"></i></a>
+        <a href="curriculo.pdf" download class="btn-neon" style="margin-top:28px;display:inline-flex;align-items:center;gap:8px;">Download CV <i class="fas fa-download"></i></a>
       </div>
       <div class="sobre-right">
         <div class="stats-grid">
@@ -438,12 +446,16 @@
   <footer class="footer">
     <p>© <span id="yr"></span> <strong>Melvin Cumbi</strong> | Desenvolvido com HTML, CSS & JS</p>
   </footer>
-<!-- SDK do EmailJS -->
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/emailjs-com.min.js"></script>
 
-<!-- Inicialização com a tua chave pública -->
-<script type="text/javascript">
-    emailjs.init("lWH6Kr1_UanwOLAit");
-</script>
+  <!-- MODAL -->
+  <div class="modal" id="modal">
+    <div class="modal-overlay" id="modal-overlay"></div>
+    <div class="modal-content">
+      <button class="modal-close" id="modal-close">&times;</button>
+      <div id="modal-body">
+        <!-- Content injected by JS -->
+      </div>
+    </div>
+  </div>
 </body>
 </html>
