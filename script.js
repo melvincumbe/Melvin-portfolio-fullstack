@@ -57,6 +57,16 @@
   setInterval(draw, 50);
 })();
 
+window.addEventListener('load', () => {
+  const preloader = document.getElementById('preloader');
+  if (preloader) {
+    preloader.style.opacity = '0';
+    setTimeout(() => {
+      preloader.style.visibility = 'hidden';
+    }, 500);
+  }
+});
+
 document.addEventListener('DOMContentLoaded', () => {
 
   /* ─── CUSTOM CURSOR ─── */
@@ -105,13 +115,30 @@ document.addEventListener('DOMContentLoaded', () => {
     l.addEventListener('click', () => mobileMenu.classList.remove('open'));
   });
 
-  /* ─── THEME TOGGLE ─── */
+  /* ─── THEME TOGGLE & AUTO DETECTION ─── */
   const themeBtn = document.getElementById('toggle-theme');
   const themeIcon = document.getElementById('theme-icon');
+
+  function setTheme(isLight) {
+    if (isLight) {
+      document.body.classList.add('light');
+      themeIcon.className = 'fas fa-sun';
+    } else {
+      document.body.classList.remove('light');
+      themeIcon.className = 'fas fa-moon';
+    }
+  }
+
+  // Auto detect system preference
+  const systemPrefersLight = window.matchMedia('(prefers-color-scheme: light)');
+  setTheme(systemPrefersLight.matches);
+
+  // Listen for changes in system preference
+  systemPrefersLight.addEventListener('change', e => setTheme(e.matches));
+
   themeBtn.addEventListener('click', () => {
-    document.body.classList.toggle('light');
-    const isLight = document.body.classList.contains('light');
-    themeIcon.className = isLight ? 'fas fa-sun' : 'fas fa-moon';
+    const isLight = !document.body.classList.contains('light');
+    setTheme(isLight);
   });
 
   /* ─── TYPING EFFECT ─── */
@@ -295,11 +322,71 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  /* ─── EMAILJS ─── */
-  if (typeof emailjs !== 'undefined') {
-    emailjs.init("lwH6Kr1_UanwOLAit");
+  /* ─── MODAL LOGIC ─── */
+  const modal = document.getElementById('modal');
+  const modalBody = document.getElementById('modal-body');
+  const modalClose = document.getElementById('modal-close');
+  const modalOverlay = document.getElementById('modal-overlay');
+
+  function openModal(content) {
+    modalBody.innerHTML = content;
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
   }
 
+  function closeModal() {
+    modal.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  modalClose.addEventListener('click', closeModal);
+  modalOverlay.addEventListener('click', closeModal);
+
+  // Handle Project Card Clicks
+  document.querySelectorAll('.proj-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const title = card.querySelector('h3').textContent;
+      const desc = card.querySelector('p').textContent;
+      const tags = card.querySelector('.proj-tags').innerHTML;
+      const icon = card.querySelector('.proj-icon').innerHTML;
+
+      const content = `
+        <div style="text-align:center; margin-bottom:20px; font-size:3rem; color:var(--primary)">${icon}</div>
+        <h2>${title}</h2>
+        <div class="modal-tech-list">${tags}</div>
+        <p>${desc}</p>
+        <p>Este é um projeto detalhado que demonstra competências avançadas em desenvolvimento. Aqui você pode adicionar mais informações sobre os desafios enfrentados e as soluções implementadas.</p>
+        <div class="hero-actions">
+           <a href="#" class="btn-neon">Ver Demo Live</a>
+           <a href="#" class="btn-ghost">GitHub Repo</a>
+        </div>
+      `;
+      openModal(content);
+    });
+  });
+
+  // Handle Skill Card Clicks
+  document.querySelectorAll('.sk-card').forEach(card => {
+    card.addEventListener('click', (e) => {
+      // Prevent triggering if clicking something else? No, the whole card is fine.
+      const name = card.querySelector('.sk-name').textContent;
+      const icon = card.querySelector('.sk-icon').innerHTML;
+      const level = card.querySelector('.sk-bar').style.getPropertyValue('--w');
+
+      const content = `
+        <div style="text-align:center; margin-bottom:20px; font-size:3rem; color:var(--primary)">${icon}</div>
+        <h2>${name}</h2>
+        <p>Nível de proficiência: ${level}</p>
+        <p>Experiência sólida utilizando ${name} em diversos projetos, desde aplicações web complexas até soluções mobile eficientes. Foco constante em boas práticas, performance e código limpo.</p>
+        <div class="sk-bar-wrap" style="height:10px; margin-top:20px;">
+          <div class="sk-bar" style="--w:${level}; width:${level}"></div>
+        </div>
+      `;
+      openModal(content);
+    });
+  });
+
+  /* ─── BACKEND CONTACT FORM ─── */
   const form = document.getElementById('contact-form');
   const status = document.getElementById('form-status');
 
@@ -310,28 +397,47 @@ document.addEventListener('DOMContentLoaded', () => {
         status.textContent = 'Enviando...';
         status.style.color = 'var(--primary)';
       }
-      if (typeof emailjs !== 'undefined') {
-        emailjs.sendForm('service_mxt7ekr', 'template_4rq4bax', this)
-          .then(() => {
-            status.textContent = '✓ Mensagem enviada com sucesso!';
-            status.style.color = '#28c840';
-            form.reset();
-          })
-          .catch(err => {
-            status.textContent = '✗ Erro ao enviar. Tente novamente.';
-            status.style.color = '#ff5f57';
-            console.error(err);
-          });
-      } else {
-        // Demo mode
-        setTimeout(() => {
-          if (status) {
-            status.textContent = '✓ Mensagem enviada com sucesso!';
-            status.style.color = '#28c840';
-            form.reset();
-          }
-        }, 1200);
-      }
+
+      const formData = new FormData(this);
+      const data = Object.fromEntries(formData.entries());
+
+      // Use relative path if hosted on same server, or environment specific URL
+      const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+        ? 'http://localhost:3000/api/contact'
+        : '/api/contact';
+
+      fetch(API_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      })
+      .then(response => {
+        if (!response.ok) throw new Error('Erro na resposta do servidor');
+        return response.json();
+      })
+      .then(result => {
+        status.textContent = '✓ Mensagem enviada com sucesso!';
+        status.style.color = '#28c840';
+        form.reset();
+      })
+      .catch(err => {
+        status.textContent = '✗ Erro ao enviar. Tente novamente.';
+        status.style.color = '#ff5f57';
+        console.error(err);
+
+        // Fallback demo mode if server is not reachable
+        if (err.message.includes('Failed to fetch') || err.message.includes('NetworkError')) {
+           status.textContent = '⚠ Servidor offline. (Modo Demo: Simulado com sucesso)';
+           status.style.color = 'var(--primary)';
+           setTimeout(() => {
+             status.textContent = '✓ Mensagem (Demo) enviada!';
+             status.style.color = '#28c840';
+             form.reset();
+           }, 1500);
+        }
+      });
     });
   }
 
