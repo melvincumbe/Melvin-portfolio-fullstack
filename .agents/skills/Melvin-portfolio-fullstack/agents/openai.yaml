@@ -1,0 +1,6 @@
+interface:
+  display_name: "Melvin Portfolio Fullstack"
+  short_description: "Repo-specific patterns and workflows for Melvin-portfolio-fullstack"
+  default_prompt: "Use the Melvin-portfolio-fullstack repo skill to follow existing architecture, testing, and workflow conventions."
+policy:
+  allow_implicit_invocation: true

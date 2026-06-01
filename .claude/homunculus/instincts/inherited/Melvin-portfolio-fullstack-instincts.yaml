@@ -1,0 +1,278 @@
+# Instincts generated from https://github.com/melvincumbe/Melvin-portfolio-fullstack
+# Generated: 2026-05-13T12:33:52.495Z
+# Version: 2.0
+# NOTE: This file supplements (does not replace) any existing curated instincts.
+# High-confidence manually curated instincts should be preserved alongside these.
+
+---
+id: Melvin-portfolio-fullstack-commit-length
+trigger: "when writing a commit message"
+confidence: 0.6
+domain: git
+source: repo-analysis
+source_repo: https://github.com/melvincumbe/Melvin-portfolio-fullstack
+---
+
+# Melvin Portfolio Fullstack Commit Length
+
+## Action
+
+Write moderate-length commit messages (~73 characters)
+
+## Evidence
+
+- Average commit message length: 73 chars
+- Based on 1 commits
+
+---
+id: Melvin-portfolio-fullstack-naming-files
+trigger: "when creating a new file"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/melvincumbe/Melvin-portfolio-fullstack
+---
+
+# Melvin Portfolio Fullstack Naming Files
+
+## Action
+
+Use camelCase naming convention
+
+## Evidence
+
+- Analyzed file naming patterns in repository
+- Dominant pattern: camelCase
+
+---
+id: Melvin-portfolio-fullstack-import-relative
+trigger: "when importing modules"
+confidence: 0.75
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/melvincumbe/Melvin-portfolio-fullstack
+---
+
+# Melvin Portfolio Fullstack Import Relative
+
+## Action
+
+Use relative imports for project files
+
+## Evidence
+
+- Import analysis shows relative import pattern
+- Example: import { x } from '../lib/x'
+
+---
+id: Melvin-portfolio-fullstack-export-style
+trigger: "when exporting from a module"
+confidence: 0.7
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/melvincumbe/Melvin-portfolio-fullstack
+---
+
+# Melvin Portfolio Fullstack Export Style
+
+## Action
+
+Prefer named exports
+
+## Evidence
+
+- Export pattern analysis
+- Dominant style: named
+
+---
+id: Melvin-portfolio-fullstack-test-separate
+trigger: "when writing tests"
+confidence: 0.8
+domain: testing
+source: repo-analysis
+source_repo: https://github.com/melvincumbe/Melvin-portfolio-fullstack
+---
+
+# Melvin Portfolio Fullstack Test Separate
+
+## Action
+
+Place tests in the tests/ or __tests__/ directory, mirroring src structure
+
+## Evidence
+
+- Separate test directory pattern detected
+- Tests live in dedicated test folders
+
+---
+id: melvin-portfolio-fullstack-instinct-file-naming
+trigger: "When creating a new file"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: melvincumbe/Melvin-portfolio-fullstack
+---
+
+# Melvin Portfolio Fullstack Instinct File Naming
+
+## Action
+
+Name the file using camelCase
+
+## Evidence
+
+- Pattern in namingConventions.files
+
+---
+id: melvin-portfolio-fullstack-instinct-function-naming
+trigger: "When defining a new function"
+confidence: 0.9
+domain: code-style
+source: repo-analysis
+source_repo: melvincumbe/Melvin-portfolio-fullstack
+---
+
+# Melvin Portfolio Fullstack Instinct Function Naming
+
+## Action
+
+Name the function using camelCase
+
+## Evidence
+
+- Pattern in namingConventions.functions
+
+---
+id: melvin-portfolio-fullstack-instinct-class-naming
+trigger: "When defining a new class"
+confidence: 0.9
+domain: code-style
+source: repo-analysis
+source_repo: melvincumbe/Melvin-portfolio-fullstack
+---
+
+# Melvin Portfolio Fullstack Instinct Class Naming
+
+## Action
+
+Name the class using PascalCase
+
+## Evidence
+
+- Pattern in namingConventions.classes
+
+---
+id: melvin-portfolio-fullstack-instinct-constant-naming
+trigger: "When defining a constant"
+confidence: 0.9
+domain: code-style
+source: repo-analysis
+source_repo: melvincumbe/Melvin-portfolio-fullstack
+---
+
+# Melvin Portfolio Fullstack Instinct Constant Naming
+
+## Action
+
+Name the constant using SCREAMING_SNAKE_CASE
+
+## Evidence
+
+- Pattern in namingConventions.constants
+
+---
+id: melvin-portfolio-fullstack-instinct-import-style
+trigger: "When importing modules"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: melvincumbe/Melvin-portfolio-fullstack
+---
+
+# Melvin Portfolio Fullstack Instinct Import Style
+
+## Action
+
+Use relative import paths
+
+## Evidence
+
+- Pattern in importStyle
+
+---
+id: melvin-portfolio-fullstack-instinct-export-style
+trigger: "When exporting modules or functions"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: melvincumbe/Melvin-portfolio-fullstack
+---
+
+# Melvin Portfolio Fullstack Instinct Export Style
+
+## Action
+
+Use named exports
+
+## Evidence
+
+- Pattern in exportStyle
+
+---
+id: melvin-portfolio-fullstack-instinct-error-handling
+trigger: "When handling errors in code"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: melvincumbe/Melvin-portfolio-fullstack
+---
+
+# Melvin Portfolio Fullstack Instinct Error Handling
+
+## Action
+
+Use try-catch blocks for error handling
+
+## Evidence
+
+- Pattern in errorHandling.style
+
+---
+id: melvin-portfolio-fullstack-instinct-test-location
+trigger: "When adding new tests"
+confidence: 0.8
+domain: testing
+source: repo-analysis
+source_repo: melvincumbe/Melvin-portfolio-fullstack
+---
+
+# Melvin Portfolio Fullstack Instinct Test Location
+
+## Action
+
+Place test files in a separate location from source files
+
+## Evidence
+
+- Pattern in architecture.folderStructure.testLocation
+
+---
+id: melvin-portfolio-fullstack-instinct-commit-format
+trigger: "When writing a commit message"
+confidence: 0.7
+domain: git
+source: repo-analysis
+source_repo: melvincumbe/Melvin-portfolio-fullstack
+---
+
+# Melvin Portfolio Fullstack Instinct Commit Format
+
+## Action
+
+Write a freeform message without a specific prefix, typically summarizing changes in one sentence
+
+## Evidence
+
+- Pattern in commits.type
+- Example: 'Evolve portfolio with Node.js backend, interactive modals, and UI polish.'
+
